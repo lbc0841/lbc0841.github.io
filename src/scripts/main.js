@@ -5,7 +5,10 @@ import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
+import { PlanIcon } from '../assets/icons';
+
 import friends from '../data/friends.json' with { type: 'json' };
+import skill_tree from '../data/skill_tree.json' with { type: 'json' };
 
 // ====== Val ======
 let webglRenderer, cssRenderer, scene, camera;
@@ -71,6 +74,7 @@ function init(){
     webglRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     webglRenderer.setSize(window.innerWidth, window.innerHeight);
     webglRenderer.setPixelRatio(window.devicePixelRatio);
+    webglRenderer.setClearColor(0x000000, 0);
     document.body.appendChild(webglRenderer.domElement);
 
     // CSS Render
@@ -237,6 +241,34 @@ function initAboutPage(){
     sideBar.appendChild(l3);
 
     aboutPage.appendChild(sideBar);
+
+    // chart
+    const chart = createElement("div", ["chart"], "");
+    skill_tree.forEach(st => {
+        const skill = createElement("div", ["skill"], "");
+
+        const skillBorderTL = createElement("div", ["skill-border-tl"], "");
+        const skillBorderTR = createElement("div", ["skill-border-tr"], "");
+        const skillBorderBL = createElement("div", ["skill-border-bl"], "");
+        const skillBorderBR = createElement("div", ["skill-border-br"], "");
+        skill.appendChild(skillBorderTL);
+        skill.appendChild(skillBorderTR);
+        skill.appendChild(skillBorderBL);
+        skill.appendChild(skillBorderBR);
+
+        const skillImg = createElement("img", ["skill-img"], "");
+        skillImg.src = st.logo;
+        const skillName = createElement("h5", ["skill-name"], st.name);
+
+        skill.style.top = st.y*140 + "px";
+        skill.style.left = st.x*160 + "px";
+
+        skill.appendChild(skillImg);
+        skill.appendChild(skillName);
+        chart.appendChild(skill);
+    });
+    
+    aboutPage.appendChild(chart);
 
     // CSS3DObject
     const Object_aboutPage = new CSS3DObject(aboutPage);

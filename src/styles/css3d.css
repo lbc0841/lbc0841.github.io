@@ -136,7 +136,7 @@
     position: absolute;
     top: 24%;
     left: 0;
-    width: 30%;
+    width: 26%;
     height: 76%;
     background: rgba(255, 255, 255, 0.2);
 }
@@ -164,6 +164,92 @@
 
 .motto:hover::before {
     width: 8px;
+}
+
+.chart {
+    position: absolute;
+    top: 40px;
+    left: 30%;
+    width: 70%;
+    height: 100%;
+}
+
+.skill {
+    position: absolute;
+    opacity: 0.5;
+    transition: all 100ms;
+}
+
+.skill:hover {
+    opacity: 1;
+}
+
+.skill:hover .skill-border-tl {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 0;
+    left: 0;
+}
+
+.skill:hover .skill-border-tr {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 0;
+    right: 0;
+}
+
+.skill:hover .skill-border-bl {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 0;
+    left: 0;
+}
+
+.skill:hover .skill-border-br {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    bottom: 0;
+    right: 0;
+}
+
+.skill:hover .skill-border-tl {
+    border-top: solid 2px #c97115;
+    border-left: solid 2px #c97115;
+}
+
+.skill:hover .skill-border-tr {
+    border-top: solid 2px #c97115;
+    border-right: solid 2px #c97115;
+}
+
+.skill:hover .skill-border-bl {
+    border-bottom: solid 2px #c97115;
+    border-left: solid 2px #c97115;
+}
+
+.skill:hover .skill-border-br {
+    border-bottom: solid 2px #c97115;
+    border-right: solid 2px #c97115;
+}
+
+.skill-img {
+    width: 80px;
+    height: 80px;
+}
+
+.skill-name {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+
+    width: max-content;
+    font-size: 0.8rem;
+
+    transform: translateX(-50%);
 }
 
 /* ====== notes-page ====== */

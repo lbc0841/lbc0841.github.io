@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Me",
+        "logo": "/img/user.png",
+        "x": 1.5, 
+        "y": 0
+    },
+
+    {
+        "name": "Blender",
+        "logo": "/img/blender.svg",
+        "x": 0, 
+        "y": 1
+    },
+    {
+        "name": "Easy EDA",
+        "logo": "/img/easy_eda.svg",
+        "x": 1, 
+        "y": 1
+    },
+    {
+        "name": "Paint",
+        "logo": "/img/pencil.svg",
+        "x": 2, 
+        "y": 1
+    },
+    {
+        "name": "VS Code",
+        "logo": "/img/vs_code.svg",
+        "x": 3, 
+        "y": 1
+    },
+
+    {
+        "name": "UltiMaker Cura",
+        "logo": "/img/ultimaker_cura.svg",
+        "x": 0, 
+        "y": 2
+    },
+    {
+        "name": "Solder",
+        "logo": "/img/solder.svg",
+        "x": 1, 
+        "y": 2
+    },
+    {
+        "name": "Astro",
+        "logo": "/img/astro.svg",
+        "x": 2.5, 
+        "y": 2
+    },
+    {
+        "name": "Android Studio",
+        "logo": "/img/android_studio.svg",
+        "x": 3.5, 
+        "y": 2
+    },
+
+    {
+        "name": "3D Print",
+        "logo": "/img/printer.svg",
+        "x": 0, 
+        "y": 3
+    }
+]
