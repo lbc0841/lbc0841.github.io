@@ -1,0 +1,148 @@
+@keyframes anim-loading {
+    0%{
+        stroke-dashoffset: 0;
+        transform: rotateZ(-45deg);
+    }
+    30%{
+        stroke-dashoffset: 100;
+        transform: rotateZ(45deg);
+    }
+
+    70%{
+        transform: rotateZ(45deg);
+        stroke-dashoffset: 200;
+    }
+    100%{
+        transform: rotateZ(45deg);
+        stroke-dashoffset: 200;
+    }
+}
+
+/* entering-page */
+@keyframes anim-entering-page {
+    0%{
+        opacity: 0;
+        transform: scale(1.02);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* zoom-in */
+.et-zoom-in {
+    vertical-align: top;
+    animation: none;
+    visibility: hidden;
+    transform-origin: 50% 50%;
+}
+
+@keyframes anim-et-zoom-in {
+    0%{
+        opacity: 0;
+        transform: scale(0.6, 0);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+/* float-in */
+.et-float-in {
+    vertical-align: top;
+    animation: none;
+    visibility: hidden;
+    transform-origin: 50% 50%;
+}
+
+@keyframes anim-et-float-in {
+    0%{
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    50%{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+/* entering-path */
+@keyframes anim-et-path {
+    0% {
+        stroke-dashoffset: 400;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* entering-progress */
+.et-progress{
+    animation: none;
+}
+
+@keyframes anim-et-progress {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+/* entering-shaking */
+#light-bulb {
+    animation: none;
+    transform-origin: 50% 0%;
+    visibility: hidden;
+}
+
+@keyframes anim-et-swing {
+    0%   { transform: rotate(150deg); }
+    30%  { transform: rotate(-50deg); }
+    50%  { transform: rotate(30deg); }
+    70%  { transform: rotate(-15deg); }
+    85%  { transform: rotate(8deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* @keyframes anim-et-shaking {
+    0%{
+        opacity: 0;
+        transform: scale(0.6, 0);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+} */
+
+/* cursor-particle */
+.cursor-particle {
+    position: absolute;
+    animation: anim-cursor-particle 1s ease-out;
+
+    z-index: 999;
+    pointer-events: none;
+}
+
+@keyframes anim-cursor-particle {
+    0%{
+        transform: translateY(0);
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.8;
+    }
+    100%{
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+}
+

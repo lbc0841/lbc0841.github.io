@@ -1,8 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+import Scanlines from '../components/Scanlines.astro';
+import Loader from '../components/Loader.astro';
+import Timeline from '../components/Timeline.astro';
+
+
+import '../styles/css3d.css'
 ---
 
-<Layout>
 
+<Layout>
+	<!-- MainNavigation -->
+	<div class="absolute top-0 left-0 w-full px-4 md:px-10 flex justify-between align-middle z-999">
+        <div class="font-bold py-4" onclick="location.href='/icrack41-blog';">ICRACK</div>
+
+        <!-- MenuBar -->
+        <div class="hidden gap-6 md:flex">
+            <button id="home-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">HOME</button>
+            <button id="about-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">ABOUT</button>
+            <button id="notes-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">NOTES</button>
+            <button id="friends-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">FRIENDS</button>
+        </div>
+	</div>
+
+	<!-- <Scanlines/> -->
+	<Loader/>
+	<Timeline/>
+
+	<h3 class="absolute bottom-2 w-full text-xl text-center text-zinc-500">Scroll Your Wheel</h3>
 </Layout>
+
+<script src="../scripts/main.js"/>
+

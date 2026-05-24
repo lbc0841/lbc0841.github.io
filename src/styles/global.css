@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+@theme {
+    --breakpoint-xs: 30rem;
+    --breakpoint-2xl: 100rem;
+    --breakpoint-3xl: 120rem;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-user-drag: none;
+    cursor: url('../assets/cursor.svg'), auto;
+
+    font-family: 'Share Tech Mono', monospace;
+}
+
+:root {
+    --font-size-base: 1rem;
+    --font-size-md: 1.3rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 2rem;
+    --font-size-2xl: 2.2rem;
+
+    --spacing: 0.25rem;
+
+    --content-color: #f1f5f9;
+    --title-color: #a2f4fd;
+    --title-color2: #a2d6fd;
+
+    --text-bolder: 35px 35px rgba(0, 0, 0, 0.25);
+
+    background: black;
+    overflow: hidden;
+    height: 100dvh;
+    width: 100dvw;
+
+    font-size: 20px;
+}
+
+@media screen and (max-width: 640px) {
+    :root {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 400px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+body {
+    position: fixed;
+    font-family: Arial, sans-serif;
+    background: #000;
+
+    color: var(--content-color);
+    height: 100vh;
+    width: 100vw;
+    
+    overflow: hidden;
+}
+
+.font-share-tech-mono {
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.click-hint {
+    pointer-events: none;
+    color: white;
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+    
+    text-align: center;
+
+    border-radius: 50%;
+    border: 1px rgba(255, 255, 255, 0.15) solid;
+
+    z-index: 100;
+}
+
+@keyframes click-hint-enter {
+    0% {
+        stroke: rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        stroke: rgba(255, 255, 255, 0.8);
+    }
+}
+
+@keyframes click-hint-leave {
+    0% {
+        stroke: rgba(255, 255, 255, 0.8);
+    }
+    100% {
+        stroke: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+
+    background-color: #fff;
+    background-image: linear-gradient(to bottom,rgba(0, 255, 0, 0) 20%, rgba(255, 255, 255, 0.4) 98%);
+
+    opacity: 40%;
+}
+
+.background-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+
+    background-image: 
+        linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px), 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px);
+
+    background-size: 60px 60px;
+}
+
+@keyframes anim_bg {
+    0%, 100% {
+        background-position:
+            calc(0vw - 70vmax) calc(20vh - 70vmax),
+            calc(70vw - 60vmax) calc(10vh - 60vmax),
+            calc(50vw - 55vmax) calc(60vh - 55vmax);
+    }
+    20%{
+        background-position:
+            calc(30vw - 70vmax) calc(40vh - 70vmax),
+            calc(90vw - 60vmax) calc(0vh - 60vmax),
+            calc(60vw - 55vmax) calc(80vh - 55vmax);
+    }
+    40%{
+        background-position:
+            calc(10vw - 70vmax) calc(60vh - 70vmax),
+            calc(80vw - 60vmax) calc(30vh - 60vmax),
+            calc(10vw - 55vmax) calc(40vh - 55vmax);
+    }
+    60%{
+        background-position:
+            calc(40vw - 70vmax) calc(80vh - 70vmax),
+            calc(50vw - 60vmax) calc(0vh - 60vmax),
+            calc(80vw - 55vmax) calc(20vh - 55vmax);
+    }
+    70%{
+        background-position:
+            calc(75vw - 70vmax) calc(90vh - 70vmax),
+            calc(30vw - 60vmax) calc(50vh - 60vmax),
+            calc(100vw - 55vmax) calc(50vh - 55vmax);
+    } 
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 26%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    user-select: none;
+
+    font-size: 22px;
+    color: rgba(200, 200, 200, 0.5);
+
+    transition: transform 0.2s;
+    z-index: 3;
+}
+
+.scroll-hint:hover {
+    transform: translateX(-50%) scaleX(1.3);
+}
+
+/* ------ scrollbar ------ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background-color: #404040;
+    z-index: 20;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    border-radius: 50px;
+    background-color: #808080;
+    z-index: 20;
+}
+
+::-webkit-scrollbar-track {
+    margin-top: 70px;
+    margin-bottom: 10px;
+}
+
+
+/* ------ others ------ */
+.link-text {
+    max-width: 100%;
+
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #51a2ff;
+    transition: all 0.2s;
+}
+
+.link-text:hover {
+    color: #74d4ff;
+}

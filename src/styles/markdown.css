@@ -1,0 +1,326 @@
+/* ------ h ------ */
+h1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    font-size: 1.8rem;
+}
+
+h2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    font-size: 1.8rem;
+}
+
+h2::before {
+    content: "📌";
+    padding-right: 0.6rem;
+    color: #adceff;
+}
+
+h3 {
+    margin-left: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1.4rem;
+
+    font-size: 1.4rem;
+}
+
+h4 {
+    margin-left: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    font-size: 1.2rem;
+}
+
+h4::before {
+    content: "◇";
+    margin-right: 0.6rem;
+}
+
+/* ------ pre / code ------ */
+pre {
+    position: relative;
+    width: auto;
+
+    margin-top: 0.6rem;
+    margin-bottom: 2rem;
+    margin-left: 0.6rem;
+    margin-right: 0.6rem;
+    padding-bottom: 0.2rem;
+
+    border: solid 1px #6e6e6e;
+    border-radius: 6px;
+    counter-reset: line;
+}
+
+pre::before {
+    content: attr(data-language);
+    display: block;
+
+    padding-left: 1.2rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.6rem;
+
+    margin-bottom: 0.6rem;
+    background-color: #171a1c;
+}
+
+pre code>span:before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2.4em;
+    margin-right: 2em;
+    color: gray;
+    text-align: right;
+}
+
+pre code {
+    display: block;
+    max-width: 100%;
+    overflow-x: scroll;
+    padding-bottom: 1rem;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding-right: 1.2rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.6rem;
+}
+
+p code,
+li code,
+h3 code {
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+
+    background-color: #121517;
+    color: white;
+
+    border: solid 1px #4e4e4e;
+    border-radius: 2px;
+}
+
+/* ------ content text ------ */
+p {
+    margin: 1rem;
+    line-height: 1.8rem;
+    color: #8f9aa4;
+}
+
+strong {
+    color: #e6e6e6;
+}
+
+a {
+    color: #51a2ff;
+}
+a:hover {
+    color: #74d5e4;
+}
+
+
+/* ------ table ------ */
+table {
+    white-space: nowrap;
+    overflow: auto;
+    
+
+    color: #bfcbd9;
+
+    border: solid 1px #bfcbd9;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+th {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+
+    font-weight: bolder;
+    border: solid 1px #bfcbd9;
+}
+
+td {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+
+    border: solid 1px #bfcbd9;
+}
+
+/* ------ list ------ */
+ul {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+    list-style: disc;
+}
+
+ol {
+    margin-left: 2.6rem;
+    margin-bottom: 2rem;
+    list-style: decimal;
+}
+
+li {
+    color: #8f9aa4;
+}
+
+/* ------ details ------ */
+details {
+    margin: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+details[open] summary {
+    margin-bottom: 1rem;
+}
+
+/* eg */
+.eg::before {
+    content: "";
+    position: absolute;
+    top: 2.4rem;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-left: solid 2px orange;
+    pointer-events: none;
+}
+.eg summary::marker {
+    content: "";
+    display: none;
+}
+.eg summary::before {
+    content: "> e.g.";
+    display: inline-block;
+    color: orange;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px orange;
+}
+.eg[open] summary::before {
+    content: "> e.g.";
+    display: inline-block;
+    color: black;
+    background: orange;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px orange;
+}
+
+/* eg math */
+.eg_math::before {
+    content: "";
+    position: absolute;
+    top: 2.4rem;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-left: solid 2px #0078d7;
+    pointer-events: none;
+}
+.eg_math summary::marker {
+    content: "";
+    display: none;
+}
+.eg_math summary::before {
+    content: "> math";
+    display: inline-block;
+    color: #0078d7;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px #0078d7;
+}
+.eg_math[open] summary::before {
+    content: "> math";
+    display: inline-block;
+    color: black;
+    background: #0078d7;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px #0078d7;
+}
+
+/* dt */
+.dt::before {
+    content: "";
+    position: absolute;
+    top: 2.4rem;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-left: solid 2px gainsboro;
+    pointer-events: none;
+}
+.dt summary::marker {
+    content: "";
+    display: none;
+}
+.dt summary::before {
+    content: ">";
+    display: inline-block;
+    color: gainsboro;
+    padding-left: 0.2rem;
+    padding-right: 0.4rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px gainsboro;
+}
+.dt[open] summary::before {
+    content: ">";
+    display: inline-block;
+    color: black;
+    background: gainsboro;
+    padding-left: 0.2rem;
+    padding-right: 0.4rem;
+    margin-right: 0.8rem;
+
+    border-radius: 6px;
+    border: solid 2px gainsboro;
+}
+
+/* ------ others ------ */
+blockquote {
+    border-left: solid 2px #888e94;
+    margin-left: 1rem;
+}
+
+hr {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    color: #58606a;
+}
+
+img {
+    transform: scale(0.9);
+    border-radius: 10px;
+}

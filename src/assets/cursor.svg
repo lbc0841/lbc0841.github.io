@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="26px" height="26px" viewBox="0 0 32 32"
+ preserveAspectRatio="xMidYMid meet">
+
+<g fill="none" stroke="#fff" stroke-width="3" >
+<path d="M 4 2 Q 30 10 28 11 Q 15 15 11 28 Q 10 30 2 4 Q 1 1 4 2 z"/>
+</g>
+</svg>

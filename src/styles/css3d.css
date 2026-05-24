@@ -1,0 +1,104 @@
+.page-title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 50px;
+}
+
+.page-border {
+    width: 1000px;
+    height: 600px;
+    border-radius: 60px;
+    border-left: solid 2px white;
+    border-right: solid 2px white;
+}
+
+.page {
+    width: 1000px;
+    height: 600px;
+}
+
+/* ====== home-page ====== */
+
+.home-page-border {
+    width: 1000px;
+    height: 600px;
+    border-radius: 60px;
+    border-left: solid 2px white;
+    border-right: solid 2px white;
+}
+
+.logo {
+    width: 100%;
+
+    position: absolute;
+    top: 50%;
+    left: 0;
+
+    transform: translateY(-50%);
+}
+
+.version {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: 30px;
+}
+
+.last-update-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding-left: 16px;
+    border-left: solid 4px white;
+
+    font-size: 20px;
+}
+
+.last-update-date {
+    font-size: 40px;
+}
+
+.social-link-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    bottom: 0;
+    right: 0;
+    gap: 20px;
+}
+
+.social-link {
+    width: 100%;
+    
+    text-align: center;
+
+    font-size: 24px;
+    transition: all 100ms ease-in;
+
+    gap: 10px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border: solid 2px white;
+}
+
+.social-link span {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.social-link:hover {
+    background: white;
+    color: black;
+}
+
+/* ====== about-page ====== */
+
+
+/* ====== notes-page ====== */
+
+/* ====== projects-page ====== */

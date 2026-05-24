@@ -1,0 +1,71 @@
+---
+---
+
+
+<div id="loader" class="flex absolute w-full h-full items-center justify-center z-999 duration-500 bg-black pb-20 pt-10">
+    <div class="relative w-175 min-w-[75vw]">
+
+        <div class="text-2xl font-bold mb-6">
+            LOADING - <span id="percent">0</span>%
+        </div>
+
+        <div class="relative w-full h-8 border-2 border-zinc-600 overflow-hidden">
+            <div id="bar" class="relative h-full w-0 bg-white"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const bar = document.getElementById("bar");
+    const percent = document.getElementById("percent");
+    const loader = document.getElementById("loader");
+    
+    let progress = 0;
+    let pageReady = false;
+    
+    function sleep(ms: number){
+        return new Promise(resolve =>
+            setTimeout(resolve, ms)
+        );
+    }
+
+    window.addEventListener("load", async() => {
+    
+        pageReady = true;
+        while(progress < 15){
+            progress += 2;
+            updateBar();
+            await sleep(10);
+        }
+
+        await sleep(400);
+
+        const finish = setInterval(()=>{
+    
+            progress += 4;
+    
+            if(progress >= 100){
+                progress = 100;
+                updateBar();
+    
+                clearInterval(finish);
+    
+                setTimeout(()=>{
+                    if(loader) loader.style.opacity = "0%";
+                },10);
+
+                setTimeout(()=>{
+                    if(loader) loader.style.display = "none";
+                },200);
+            }
+    
+            updateBar();
+    
+        },10);
+    });
+    
+    function updateBar(){
+        if(bar) bar.style.width = progress + "%";
+        if(percent) percent.textContent = Math.floor(progress).toString();
+    }
+</script>
