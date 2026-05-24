@@ -18,6 +18,39 @@
     height: 600px;
 }
 
+@media screen and (max-width: 768px) {
+    .page {
+        width: 900px;
+        height: 560px;
+    }
+    .page-border {
+        width: 900px;
+        height: 560px;
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .page {
+        width: 600px;
+        height: 500px;
+    }
+    .page-border {
+        width: 600px;
+        height: 500px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .page {
+        width: 460px;
+        height: 600px;
+    }
+    .page-border {
+        width: 460px;
+        height: 600px;
+    }
+}
+
 /* ====== home-page ====== */
 
 .home-page-border {
