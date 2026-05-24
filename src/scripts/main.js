@@ -5,11 +5,15 @@ import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
+import friends from '../data/friends.json' with { type: 'json' };
+
 // ====== Val ======
 let webglRenderer, cssRenderer, scene, camera;
 
-let cameraPositionOffsetY = 0, cameraRotateOffsetY = 0
+let terrainPositionOffsetY = 0, cameraRotateOffsetY = 0
 let cameraRotateTargetY = 0;
+
+let terrain = null, sphere = null;
 
 // Canvas W H
 const w = window.innerWidth;
@@ -26,7 +30,7 @@ const friendsButton = document.getElementById("friends-button");
 
 // ====== Init ======
 init();
-initTerrain();
+initObjects();
 initHomePage();
 initAboutPage();
 initNotesPage();
@@ -85,8 +89,10 @@ function init(){
     // textureLoader = new THREE.TextureLoader();
 }
 
-function initTerrain(){
+function initObjects(){
     const objLoader = new OBJLoader();
+
+    // Terrain
     objLoader.load('/threejs/model/terrain.obj', (root) => {
         root.scale.set(10, 10, 10);
         root.position.y = -60;
@@ -101,14 +107,28 @@ function initTerrain(){
             }
         });
 
-        scene.add(root);
+        terrain = root;
+        scene.add(terrain);
     });
 
-    // Sky Box
-    const sky = new Sky();
-    sky.scale.setScalar(450000);
+    // Sphere
+    objLoader.load('/threejs/model/sphere.obj', (root) => {
+        root.scale.set(10, 10, 10);
+        root.position.set(0, 0, -50);
 
-    scene.add(sky);
+        root.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({
+                    color: 0xc97115,
+                    wireframe: true,
+                    wireframeLinewidth: 1
+                });
+            }
+        });
+
+        sphere = root;
+        scene.add(sphere);
+    });
 }
 
 function initHomePage(){
@@ -200,6 +220,24 @@ function initAboutPage(){
     aboutPageNumber.appendChild(aboutPageTitle)
     aboutPage.appendChild(aboutPageNumber);
 
+    // Description
+    const sideBar = createElement("div", ["side-bar"], "");
+    const avatar = createElement("img", ["h-[140px]", "w-[140px]", "mx-2", "my-4"], "");
+    avatar.src = "https://avatars.githubusercontent.com/lbc0841";
+
+    const desc = createElement("div", ["motto"], "梭哈，是種智慧\n賭狗，應有盡有");
+    const l1 = createElement("h3", ["mx-2", "mt-4"], "- MBIT：INTP");
+    const l2 = createElement("h3", ["mx-2"], "- 愚人節生日");
+    const l3 = createElement("h3", ["mx-2"], "- 我裂開了");
+
+    sideBar.appendChild(avatar);
+    sideBar.appendChild(desc);
+    sideBar.appendChild(l1);
+    sideBar.appendChild(l2);
+    sideBar.appendChild(l3);
+
+    aboutPage.appendChild(sideBar);
+
     // CSS3DObject
     const Object_aboutPage = new CSS3DObject(aboutPage);
     const Object_aboutPageBorder = new CSS3DObject(aboutPageBorder);
@@ -229,6 +267,15 @@ function initNotesPage(){
     
     notesPageNumber.appendChild(notesPageTitle)
     notesPage.appendChild(notesPageNumber);
+
+    // 01
+    const notes = createElement("div", ["notes-container"], "");
+    const note1 = createElement("div", ["note"], "01. 數位電子乙級");
+    const note2 = createElement("div", ["note"], "02. ZJANS-ZeroJudge題解");
+    
+    notes.appendChild(note1);
+    notes.appendChild(note2);
+    notesPage.appendChild(notes);
 
     // CSS3DObject
     const Object_notesPage = new CSS3DObject(notesPage);
@@ -260,6 +307,28 @@ function initFriendsPage(){
     friendsPageNumber.appendChild(friendsPageTitle)
     friendsPage.appendChild(friendsPageNumber);
 
+    // Friends
+    const friendsContainer = createElement("div", ["friends-container"], "");
+    friends.forEach(f => {
+        const friend = createElement("a", ["friend"], "");
+        friend.href = f.url;
+
+        const avatar = createElement("img", ["h-full"], "");
+        avatar.src = f.avatar;
+
+        const nameContainer = createElement("div", ["w-full"], "");
+        const name = createElement("h3", ["name"], f.name);
+        const desc = createElement("span", ["desc"], f.desc);
+        nameContainer.appendChild(name);
+        nameContainer.appendChild(desc);
+
+        friend.appendChild(avatar);
+        friend.appendChild(nameContainer);
+        friendsContainer.appendChild(friend);
+    });
+    
+    friendsPage.appendChild(friendsContainer);
+
     // CSS3DObject
     const Object_friendsPage = new CSS3DObject(friendsPage);
     const Object_friendsPageBorder = new CSS3DObject(friendsPageBorder);
@@ -279,7 +348,7 @@ function initFriendsPage(){
 // mouse listener
 window.addEventListener('mousemove', (e)=>{
     cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.5, -0.08, 0.08);
-    cameraPositionOffsetY = clamp((e.clientY - centerY)/h*(-10), -12, 12);
+    terrainPositionOffsetY = clamp((e.clientY - centerY)/h*10, -12, 12);
 });
 
 window.addEventListener('wheel', function(event) {
@@ -317,7 +386,12 @@ function animate(){
     requestAnimationFrame(animate);
 
     camera.rotation.y = lerp(camera.rotation.y, cameraRotateTargetY + cameraRotateOffsetY, 0.1);
-    camera.position.y = lerp(camera.position.y, cameraPositionOffsetY, 0.1);
+    if(terrain) terrain.position.y = -10 + lerp(terrain.position.y, terrainPositionOffsetY, 0.1);
+    if(sphere){
+        sphere.rotation.y += 0.002;
+        sphere.rotation.x += 0.002;
+    }
+
 
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);

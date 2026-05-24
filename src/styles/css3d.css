@@ -2,15 +2,15 @@
     position: absolute;
     top: 20px;
     left: 20px;
-    font-size: 50px;
+    font-size: 2.2rem;
 }
 
 .page-border {
     width: 1000px;
     height: 600px;
-    border-radius: 60px;
-    border-left: solid 2px white;
-    border-right: solid 2px white;
+    /* border-radius: 60px; */
+    border: solid 2px white;
+    /* border-right: solid 2px white; */
 }
 
 .page {
@@ -74,8 +74,8 @@
 .version {
     position: absolute;
     top: 30px;
-    right: 30px;
-    font-size: 30px;
+    right: 10px;
+    font-size: 1.5rem;
 }
 
 .last-update-container {
@@ -85,11 +85,11 @@
     padding-left: 16px;
     border-left: solid 4px white;
 
-    font-size: 20px;
+    font-size: 0.8rem;
 }
 
 .last-update-date {
-    font-size: 40px;
+    font-size: 2rem;
 }
 
 .social-link-container {
@@ -117,6 +117,8 @@
     padding-right: 20px;
 
     border: solid 2px white;
+
+    font-size: 1rem;
 }
 
 .social-link span {
@@ -130,8 +132,105 @@
 }
 
 /* ====== about-page ====== */
+.side-bar {
+    position: absolute;
+    top: 24%;
+    left: 0;
+    width: 30%;
+    height: 76%;
+    background: rgba(255, 255, 255, 0.2);
+}
 
+.motto {
+    position: relative;
+    font-size: 1.2rem;
+    margin-left: 10px;
+    padding-left: 18px;
+    color: #c97115;
+
+    white-space: pre;
+}
+
+.motto::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 4px;
+    background: #c97115;
+
+    transition: all 100ms;
+}
+
+.motto:hover::before {
+    width: 8px;
+}
 
 /* ====== notes-page ====== */
+.notes-container {
+    position: absolute;
+    top: 200px;
+    left: 20px;
+}
+
+.note {
+    width: 100%;
+    font-size: 2rem;
+    color: white;
+    opacity: 0.5;
+
+    transition: all 100ms;
+}
+
+.note:hover {
+    opacity: 1;
+    color: #c97115;
+    transform: translateX(20px);
+}
 
 /* ====== projects-page ====== */
+.friends-container {
+    position: absolute;
+    top: 26%;
+
+    height: 74%;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.friend {
+    position: relative;
+    display: flex;
+    height: 80px;
+    width: 100%;
+    gap: 10px;
+    /* padding: 6px; */
+}
+
+.friend::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 100%;
+
+    transform: scaleX(1.08) scaleY(1.2);
+
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: all 100ms;
+}
+
+.friend:hover::after {
+    width: 100%;
+}
+
+.name {
+    font-size: 1rem;
+}
+
+.desc {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}

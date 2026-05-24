@@ -30,6 +30,18 @@ function draw() {
     currentOffset = lerp(currentOffset, targetOffset, 0.1);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // arrow
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(canvas.width * 1/2 + 5, canvas.height* 3/4);
+    ctx.lineTo(canvas.width * 1/2, canvas.height* 2/3);
+    ctx.lineTo(canvas.width * 1/2 - 5, canvas.height* 3/4);
+
+    ctx.stroke();
+
     // horizontal line
     ctx.strokeStyle = "#505050";
     ctx.lineWidth = 15;
