@@ -103,11 +103,45 @@ function initObjects(){
 
         root.traverse((child) => {
             if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({
-                    color: 0x525252,
+                const material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        // 目前不需要 cameraPosition uniform（因為用 view space 計算距離）
+                    },
+                    vertexShader: `
+                        varying vec3 vViewPosition;
+                
+                        void main() {
+                            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                            vViewPosition = mvPosition.xyz;
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        precision mediump float;   // ← 這一行很重要！
+                
+                        varying vec3 vViewPosition;
+                
+                        void main() {
+                            float distance = length(vViewPosition);
+                
+                            float minDist = 100.0;
+                            float maxDist = 1000.0;
+                
+                            float t = clamp((distance - minDist) / (maxDist - minDist), 0.0, 1.0);
+                
+                            vec3 nearColor = vec3(0, 0, 0);
+                            vec3 farColor  = vec3(0.2, 0.2, 0.2);
+                
+                            vec3 color = mix(nearColor, farColor, t);
+                
+                            gl_FragColor = vec4(color, 1.0);
+                        }
+                    `,
                     wireframe: true,
-                    wireframeLinewidth: 1
+                    wireframeLinewidth: 1.5
                 });
+
+                child.material = material;
             }
         });
 
@@ -180,13 +214,13 @@ function initHomePage(){
 
     const socialLink_discord = createElement("a", ["social-link"], "");
     const discord_logo = createElement("span", ["fa-brands", "fa-discord"], "");
-    socialLink_discord.href = "https://www.google.com/?pli=1";
+    socialLink_discord.href = "https://discord.gg/GWEmUwaSFG";
     socialLink_discord.appendChild(discord_logo);
     socialLink_discord.appendChild(createElement("span", [], "Discord"));
 
     const socialLink_github = createElement("a", ["social-link"], "");
     const github_logo = createElement("span", ["fa-brands", "fa-github"], "");
-    socialLink_github.href = "https://www.google.com/?pli=1";
+    socialLink_github.href = "https://github.com/lbc0841";
     socialLink_github.appendChild(github_logo);
     socialLink_github.appendChild(createElement("span", [], "GitHub"));
 
