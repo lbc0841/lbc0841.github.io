@@ -12,8 +12,8 @@
 .border-container .corner-bl,
 .border-container .corner-br {
     position: absolute;
-    padding: 3px;
-    border-width: 3px;
+    padding: 2px;
+    border-width: 1px;
     border-style: solid;
 }
 

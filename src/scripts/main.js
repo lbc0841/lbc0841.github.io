@@ -14,11 +14,22 @@ import live from '../data/live.json' with { type: 'json' };
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 let webglRenderer, cssRenderer, scene, camera;
+const cameraGroup = new THREE.Group();
 
-let terrainPositionOffsetY = 0, cameraRotateOffsetY = 0
+let cameraRotateOffsetX = 0, cameraRotateOffsetY = 0
 let cameraRotateTargetY = 0;
 
 let terrain = null, sphere = null;
+
+// particle
+const particleCount = 5000;
+let particleGeometry = new THREE.BufferGeometry();
+const particlePosition = new Float32Array(particleCount * 3);
+const particleVelocity = [];
+
+// page
+const pageGroups = [];
+let pageNum = 0;
 
 let lastTouchX = 0;
 let basePageDistance = 0;
@@ -38,16 +49,11 @@ const aboutButton = document.getElementById("about-button");
 const notesButton = document.getElementById("notes-button");
 const friendsButton = document.getElementById("friends-button");
 
-const pageGroups = [];
-
-const treeCanvas = createElement("canvas", ["tree-canvas"], "");
-const treeCanvasCtx = treeCanvas.getContext("2d");
-
-let pageNum = 0;
-
 // ====== Init ======
 init();
+
 initObjects();
+initParticle();
 
 initHomePage();
 initAboutPage();
@@ -90,16 +96,35 @@ function createElement(tagName, classes, content){
     return element;
 }
 
+function createCircleTexture(){
+    const size = 128;
+    const canvas = document.createElement("canvas");
+
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+    ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+}
+
+// ====== Init function ======
 function init(){
     // WebGL Renderer
-    webglRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    webglRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     webglRenderer.setSize(window.innerWidth, window.innerHeight);
     webglRenderer.setPixelRatio(window.devicePixelRatio);
-    webglRenderer.setClearColor(0x000000, 0);
+    // webglRenderer.setClearColor(0x000000, 0);
     document.body.appendChild(webglRenderer.domElement);
 
     // CSS Render
-    cssRenderer = new CSS3DRenderer({ alpha: true });
+    cssRenderer = new CSS3DRenderer({ alpha: false });
     cssRenderer.setSize(window.innerWidth, window.innerHeight);
     cssRenderer.domElement.style.position = 'absolute';
     cssRenderer.domElement.style.top = '0';
@@ -110,6 +135,9 @@ function init(){
 
     // Camera
     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+    cameraGroup.add(camera);
+
+    scene.add(cameraGroup);
     // texture loader
     // textureLoader = new THREE.TextureLoader();
 }
@@ -188,6 +216,33 @@ function initObjects(){
         sphere = root;
         scene.add(sphere);
     });
+}
+
+function initParticle(){
+    for(let i=0; i<particleCount; i++){
+        particlePosition[i*3] = (Math.random()-0.5) * 400;
+        particlePosition[i*3+1] = (Math.random()-0.4) * 100;
+        particlePosition[i*3+2] = (Math.random()-0.5) * 400;
+
+        particleVelocity.push(0.1 + Math.random()*0.1);
+    }
+
+    particleGeometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(particlePosition, 3)
+    );
+
+    const material = new THREE.PointsMaterial({
+        map: createCircleTexture(),
+        size: 1,
+        transparent:true,
+        opacity: 0.3,
+        depthWrite:false,
+        blending: THREE.AdditiveBlending
+    });
+
+    const particle = new THREE.Points(particleGeometry, material);
+    scene.add(particle);
 }
 
 function initHomePage(){
@@ -473,8 +528,8 @@ function initFriendsPage(){
 // mouse listener
 window.addEventListener('mousemove', (e)=>{
     if(!isMobile){
-        cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.5, -0.08, 0.08);
-        terrainPositionOffsetY = clamp((e.clientY - centerY)/h*10, -12, 12);
+        cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.4, -0.06, 0.06);
+        cameraRotateOffsetX = clamp((e.clientY - centerY)/w*0.4, -0.06, 0.06);
     }
 });
 
@@ -508,32 +563,32 @@ window.addEventListener('resize', () => {
 
 // button on click
 homeButton.addEventListener('click', function(event) {
-    cameraRotateTargetY = getMinRotateDistance(camera.rotation.y, 0);
+    cameraRotateTargetY = getMinRotateDistance(cameraGroup.rotation.y, 0);
 });
 
 aboutButton.addEventListener('click', function(event) {
-    cameraRotateTargetY = getMinRotateDistance(camera.rotation.y, Math.PI*3/2);
+    cameraRotateTargetY = getMinRotateDistance(cameraGroup.rotation.y, Math.PI*3/2);
 });
 
 notesButton.addEventListener('click', function(event) {
-    cameraRotateTargetY = getMinRotateDistance(camera.rotation.y, Math.PI);
+    cameraRotateTargetY = getMinRotateDistance(cameraGroup.rotation.y, Math.PI);
 });
 
 friendsButton.addEventListener('click', function(event) {  
-    cameraRotateTargetY = getMinRotateDistance(camera.rotation.y, Math.PI/2);
+    cameraRotateTargetY = getMinRotateDistance(cameraGroup.rotation.y, Math.PI/2);
 });
 
 // Animate
 function animate(){
     requestAnimationFrame(animate);
 
-    camera.rotation.y = lerp(camera.rotation.y, cameraRotateTargetY + cameraRotateOffsetY, 0.1);
-    if(terrain) terrain.position.y = -10 + lerp(terrain.position.y, terrainPositionOffsetY, 0.1);
+    updateCamera();
+    updateParticle();
+
     if(sphere){
         sphere.rotation.y += 0.002;
         sphere.rotation.x += 0.002;
     }
-
 
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
@@ -592,4 +647,29 @@ function drawTree(chart){
                 + " " + d.parent.x + "," + d.parent.y;
             })
         .attr("stroke","white").attr("fill","none");
+}
+
+function updateCamera(){
+    cameraGroup.rotation.y = lerp(cameraGroup.rotation.y, cameraRotateTargetY + cameraRotateOffsetY, 0.1);
+    camera.rotation.x = lerp(camera.rotation.x, cameraRotateOffsetX, 0.1);
+    camera.rotation.z = lerp(camera.rotation.z, (cameraGroup.rotation.y-cameraRotateTargetY)*0.2, 0.1);
+}
+
+function updateParticle(){
+    const pos = particleGeometry.attributes.position.array;
+
+    for(let i=0; i<particleCount; i++){
+
+        pos[i*3+1] -= particleVelocity[i];
+
+        if(pos[i*3+1] < -60){
+
+            pos[i*3+1] = 60;
+
+            pos[i*3] = (Math.random()-0.5)*400;
+            pos[i*3+2] = (Math.random()-0.5)*400;
+        }
+    }
+
+    particleGeometry.attributes.position.needsUpdate = true;
 }

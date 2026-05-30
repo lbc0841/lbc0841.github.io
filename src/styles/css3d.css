@@ -9,7 +9,7 @@
     width: 1000px;
     height: 600px;
     /* border-radius: 60px; */
-    border: solid 2px white;
+    border: solid 2px #3d3d3d;
     /* border-right: solid 2px white; */
 }
 
@@ -134,11 +134,12 @@
 /* ====== about-page ====== */
 .side-bar {
     position: absolute;
-    top: 24%;
+    top: 2%;
     left: 0;
     width: 26%;
-    height: 76%;
-    background: rgba(255, 255, 255, 0.2);
+    height: 96%;
+    padding-top: 14%;
+    background: rgba(80, 80, 80, 0.2);
 }
 
 .avatar {
@@ -329,15 +330,12 @@
 
     margin-right: 40px;
 
-    opacity: 0.8;
-
     overflow: hidden;
 }
 
 .live-item:hover {
     flex: 4;
     filter: brightness(1.2);
-    opacity: 1;
     border-right: 2px solid #ff8400;
 }
 
@@ -345,13 +343,13 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    filter: blur(4px);
+    filter: blur(4px) saturate(0.3);
     transition: all 200ms;
 
     transform: scale(1.1);
 }
 .live-item:hover .live-img {
-    filter: blur(0px);
+    filter: blur(0px) saturate(1);
     transform: scale(1);
 }
 

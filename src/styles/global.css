@@ -9,7 +9,8 @@
 * {
     box-sizing: border-box;
     -webkit-user-drag: none;
-    cursor: url('../assets/cursor.svg'), auto;
+    /* cursor: url('../assets/cursor.svg'), auto; */
+    /* cursor: none; */
 
     font-family: 'Share Tech Mono', monospace;
 }

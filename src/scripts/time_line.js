@@ -7,6 +7,12 @@ let currentOffset = 0, targetOffset = 0;
 
 let lastTouchX = 0;
 
+// Main Navigation Button
+const homeButton = document.getElementById("home-button");
+const aboutButton = document.getElementById("about-button");
+const notesButton = document.getElementById("notes-button");
+const friendsButton = document.getElementById("friends-button");
+
 resize();
 draw();
 
@@ -42,6 +48,25 @@ function resize() {
     lineCount = Math.ceil(canvas.width/spacing);
     lineCount += 10 - lineCount%10;
 }
+
+// button on click
+const offset = 200;
+
+homeButton.addEventListener('click', function(event) {
+    targetOffset += offset;
+});
+
+aboutButton.addEventListener('click', function(event) {
+    targetOffset += offset;
+});
+
+notesButton.addEventListener('click', function(event) {
+    targetOffset += offset;
+});
+
+friendsButton.addEventListener('click', function(event) {  
+    targetOffset += offset;
+});
 
 function draw() {
     currentOffset = lerp(currentOffset, targetOffset, 0.1);
