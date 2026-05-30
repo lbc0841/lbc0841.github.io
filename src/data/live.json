@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Game",
+        "image": "/img/game.jpg"
+    },
+    {
+        "name": "Music",
+        "image": "/img/music.jpg"
+    },
+    {
+        "name": "Movie",
+        "image": "/img/movie.jpg"
+    },
+    {
+        "name": "Travel",
+        "image": "/img/travel.jpg"
+    }
+]

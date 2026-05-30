@@ -2,15 +2,17 @@ import * as THREE from 'three';
 
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js'
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import { GroundedSkybox } from 'three/addons/objects/GroundedSkybox.js';
-import { Sky } from 'three/addons/objects/Sky.js';
 
-import { PlanIcon } from '../assets/icons';
+import { treemap, hierarchy, tree } from "https://cdn.skypack.dev/d3-hierarchy@3";
+import * as d3 from "https://cdn.skypack.dev/d3@7";
 
 import friends from '../data/friends.json' with { type: 'json' };
 import skill_tree from '../data/skill_tree.json' with { type: 'json' };
+import live from '../data/live.json' with { type: 'json' };
 
 // ====== Val ======
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 let webglRenderer, cssRenderer, scene, camera;
 
 let terrainPositionOffsetY = 0, cameraRotateOffsetY = 0
@@ -18,6 +20,11 @@ let cameraRotateTargetY = 0;
 
 let terrain = null, sphere = null;
 
+let lastTouchX = 0;
+let basePageDistance = 0;
+if(isMobile) basePageDistance = 1800;
+else basePageDistance = 1450;
+ 
 // Canvas W H
 const w = window.innerWidth;
 const centerX = w/2;
@@ -31,13 +38,27 @@ const aboutButton = document.getElementById("about-button");
 const notesButton = document.getElementById("notes-button");
 const friendsButton = document.getElementById("friends-button");
 
+const pageGroups = [];
+
+const treeCanvas = createElement("canvas", ["tree-canvas"], "");
+const treeCanvasCtx = treeCanvas.getContext("2d");
+
+let pageNum = 0;
+
 // ====== Init ======
 init();
 initObjects();
+
 initHomePage();
 initAboutPage();
-initNotesPage();
+// initNotesPage();
+initLivePage();
 initFriendsPage();
+
+pageGroups.forEach((pg, index) => {
+    pg.rotation.set(0, -(Math.PI*2 * index/pageGroups.length), 0);
+    scene.add(pg);
+});
 
 // animate
 animate();
@@ -108,21 +129,21 @@ function initObjects(){
                         // 目前不需要 cameraPosition uniform（因為用 view space 計算距離）
                     },
                     vertexShader: `
-                        varying vec3 vViewPosition;
+                        varying vec3 vWorldPosition;
                 
                         void main() {
                             vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                            vViewPosition = mvPosition.xyz;
+                            vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
                             gl_Position = projectionMatrix * mvPosition;
                         }
                     `,
                     fragmentShader: `
                         precision mediump float;   // ← 這一行很重要！
                 
-                        varying vec3 vViewPosition;
+                        varying vec3 vWorldPosition;
                 
                         void main() {
-                            float distance = length(vViewPosition);
+                            float distance = length(vWorldPosition);
                 
                             float minDist = 100.0;
                             float maxDist = 1000.0;
@@ -152,7 +173,7 @@ function initObjects(){
     // Sphere
     objLoader.load('/threejs/model/sphere.obj', (root) => {
         root.scale.set(10, 10, 10);
-        root.position.set(0, 0, -50);
+        root.position.set(0, 0, -(basePageDistance/25));
 
         root.traverse((child) => {
             if (child.isMesh) {
@@ -170,12 +191,13 @@ function initObjects(){
 }
 
 function initHomePage(){
+    pageNum++;
+    
     // Home Page
     const homePage = createElement("div", ["page"], "");
 
     // Home Page Border
     const homePageBorder = createElement("div", ["page-border"], "");
-
 
     // Logo
     const logo = createElement("div", ["logo"], "");
@@ -192,7 +214,7 @@ function initHomePage(){
 	});
 
     // Page Number
-    const homePageNumber = createElement("div", ["page-title"], "01");
+    const homePageNumber = createElement("div", ["page-title"], "0"+pageNum);
     const homePageTitle = createElement("h3", ["text-lg"], "Home Page");
 
     homePageNumber.appendChild(homePageTitle)
@@ -233,18 +255,21 @@ function initHomePage(){
     const Object_homePageBorder = new CSS3DObject(homePageBorder);
 
     Object_homePage.scale.set(2, 2, 2);
-    Object_homePage.position.set(0, 0, -1450);
-    Object_homePage.rotation.set(0, 0, 0);
+    Object_homePage.position.set(0, 0, -basePageDistance);
 
     Object_homePageBorder.scale.set(2, 2, 2);
-    Object_homePageBorder.position.set(0, 0, -1600);
-    Object_homePageBorder.rotation.set(0, 0, 0);
+    Object_homePageBorder.position.set(0, 0, -(basePageDistance+150));
 
-    scene.add(Object_homePage);
-    scene.add(Object_homePageBorder);
+    const group = new THREE.Group();
+    group.add(Object_homePage);
+    group.add(Object_homePageBorder);
+
+    pageGroups.push(group);
 }
 
 function initAboutPage(){
+    pageNum++;
+
     // About Page
     const aboutPage = createElement("div", ["page"], "");
 
@@ -252,7 +277,7 @@ function initAboutPage(){
     const aboutPageBorder = createElement("div", ["page-border"], "");
 
     // Page Number
-    const aboutPageNumber = createElement("div", ["page-title"], "02");
+    const aboutPageNumber = createElement("div", ["page-title"], "0"+pageNum);
     const aboutPageTitle = createElement("h3", ["text-lg"], "About Me");
 
     aboutPageNumber.appendChild(aboutPageTitle)
@@ -260,48 +285,22 @@ function initAboutPage(){
 
     // Description
     const sideBar = createElement("div", ["side-bar"], "");
-    const avatar = createElement("img", ["h-[140px]", "w-[140px]", "mx-2", "my-4"], "");
+    const avatar = createElement("img", ["avatar"], "");
     avatar.src = "https://avatars.githubusercontent.com/lbc0841";
 
-    const desc = createElement("div", ["motto"], "梭哈，是種智慧\n賭狗，應有盡有");
-    const l1 = createElement("h3", ["mx-2", "mt-4"], "- MBIT：INTP");
-    const l2 = createElement("h3", ["mx-2"], "- 愚人節生日");
-    const l3 = createElement("h3", ["mx-2"], "- 我裂開了");
+    const motto = createElement("div", ["motto"], "梭哈，是種智慧\n賭狗，應有盡有");
+    const desc = createElement("h3", ["author-desc"], "- MBIT：INTP\n- 愚人節生日\n- 我裂開了");
 
     sideBar.appendChild(avatar);
+    sideBar.appendChild(motto);
     sideBar.appendChild(desc);
-    sideBar.appendChild(l1);
-    sideBar.appendChild(l2);
-    sideBar.appendChild(l3);
 
     aboutPage.appendChild(sideBar);
 
     // chart
     const chart = createElement("div", ["chart"], "");
-    skill_tree.forEach(st => {
-        const skill = createElement("div", ["skill"], "");
 
-        const skillBorderTL = createElement("div", ["skill-border-tl"], "");
-        const skillBorderTR = createElement("div", ["skill-border-tr"], "");
-        const skillBorderBL = createElement("div", ["skill-border-bl"], "");
-        const skillBorderBR = createElement("div", ["skill-border-br"], "");
-        skill.appendChild(skillBorderTL);
-        skill.appendChild(skillBorderTR);
-        skill.appendChild(skillBorderBL);
-        skill.appendChild(skillBorderBR);
-
-        const skillImg = createElement("img", ["skill-img"], "");
-        skillImg.src = st.logo;
-        const skillName = createElement("h5", ["skill-name"], st.name);
-
-        skill.style.top = st.y*140 + "px";
-        skill.style.left = st.x*160 + "px";
-
-        skill.appendChild(skillImg);
-        skill.appendChild(skillName);
-        chart.appendChild(skill);
-    });
-    
+    drawTree(chart);
     aboutPage.appendChild(chart);
 
     // CSS3DObject
@@ -309,18 +308,21 @@ function initAboutPage(){
     const Object_aboutPageBorder = new CSS3DObject(aboutPageBorder);
     
     Object_aboutPage.scale.set(2, 2, 2);
-    Object_aboutPage.position.set(1450, 0, 0);
-    Object_aboutPage.rotation.set(0, Math.PI*3/2, 0);
+    Object_aboutPage.position.set(0, 0, -basePageDistance);
     
     Object_aboutPageBorder.scale.set(2, 2, 2);
-    Object_aboutPageBorder.position.set(1600, 0, 0);
-    Object_aboutPageBorder.rotation.set(0, Math.PI*3/2, 0);
+    Object_aboutPageBorder.position.set(0, 0, -(basePageDistance+150));
     
-    scene.add(Object_aboutPage);
-    scene.add(Object_aboutPageBorder);
+    const group = new THREE.Group();
+    group.add(Object_aboutPage);
+    group.add(Object_aboutPageBorder);
+
+    pageGroups.push(group);
 }
 
 function initNotesPage(){
+    pageNum++;
+
     // Notes Page
     const notesPage = createElement("div", ["page"], "");
 
@@ -328,7 +330,7 @@ function initNotesPage(){
     const notesPageBorder = createElement("div", ["page-border"], "");
 
     // Page Number
-    const notesPageNumber = createElement("div", ["page-title"], "03");
+    const notesPageNumber = createElement("div", ["page-title"], "0"+pageNum);
     const notesPageTitle = createElement("h3", ["text-lg"], "My Notes");
     
     notesPageNumber.appendChild(notesPageTitle)
@@ -344,22 +346,78 @@ function initNotesPage(){
     notesPage.appendChild(notes);
 
     // CSS3DObject
-    const Object_notesPage = new CSS3DObject(notesPage);
-    const Object_notesPageBorder = new CSS3DObject(notesPageBorder);
+    const Object_livePage = new CSS3DObject(notesPage);
+    const Object_livePageBorder = new CSS3DObject(notesPageBorder);
+    
+    Object_livePage.scale.set(2, 2, 2);
+    Object_livePage.position.set(0, 0, -basePageDistance);
+    
+    Object_livePageBorder.scale.set(2, 2, 2);
+    Object_livePageBorder.position.set(0, 0, -(basePageDistance+150));
+    
+    const group = new THREE.Group();
+    group.add(Object_livePage);
+    group.add(Object_livePageBorder);
+
+    pageGroups.push(group);
+}
+
+function initLivePage(){
+    pageNum++;
+
+    // Live Page
+    const livePage = createElement("div", ["page"], "");
+
+    // Live Page Border
+    const livePageBorder = createElement("div", ["page-border"], "");
+
+    // Page Number
+    const livePageNumber = createElement("div", ["page-title"], "0"+pageNum);
+    const livePageTitle = createElement("h3", ["text-lg"], "My Live");
+    
+    livePageNumber.appendChild(livePageTitle)
+    livePage.appendChild(livePageNumber);
+
+    // Live
+    const liveContainer = createElement("div", ["live-container"], "");
+
+    live.forEach(l => {
+        const item = createElement("div", ["live-item"], "");
+
+        const img = createElement("div", ["live-img"], "");
+        img.style.background = "url(" + l.image + ")";
+        img.style.backgroundSize = "cover";
+        img.style.backgroundPosition = "center";
+
+        const content = createElement("div", ["live-content"], l.name);
+
+        item.appendChild(img);
+        item.appendChild(content);
+        liveContainer.appendChild(item);
+    });
+
+    livePage.appendChild(liveContainer);
+
+    // CSS3DObject
+    const Object_notesPage = new CSS3DObject(livePage);
+    const Object_notesPageBorder = new CSS3DObject(livePageBorder);
     
     Object_notesPage.scale.set(2, 2, 2);
-    Object_notesPage.position.set(0, 0, 1450);
-    Object_notesPage.rotation.set(0, Math.PI, 0);
+    Object_notesPage.position.set(0, 0, -basePageDistance);
     
     Object_notesPageBorder.scale.set(2, 2, 2);
-    Object_notesPageBorder.position.set(0, Math.PI, 1600);
-    Object_notesPageBorder.rotation.set(0, Math.PI, 0);
+    Object_notesPageBorder.position.set(0, 0, -(basePageDistance+150));
     
-    scene.add(Object_notesPage);
-    scene.add(Object_notesPageBorder);
+    const group = new THREE.Group();
+    group.add(Object_notesPage);
+    group.add(Object_notesPageBorder);
+
+    pageGroups.push(group);
 }
 
 function initFriendsPage(){
+    pageNum++;
+
     // Friends Page
     const friendsPage = createElement("div", ["page"], "");
 
@@ -367,7 +425,7 @@ function initFriendsPage(){
     const friendsPageBorder = createElement("div", ["page-border"], "");
 
     // Page Number
-    const friendsPageNumber = createElement("div", ["page-title"], "04");
+    const friendsPageNumber = createElement("div", ["page-title"], "0"+pageNum);
     const friendsPageTitle = createElement("h3", ["text-lg"], "Friends List");
     
     friendsPageNumber.appendChild(friendsPageTitle)
@@ -384,7 +442,7 @@ function initFriendsPage(){
 
         const nameContainer = createElement("div", ["w-full"], "");
         const name = createElement("h3", ["name"], f.name);
-        const desc = createElement("span", ["desc"], f.desc);
+        const desc = createElement("span", ["friend-desc"], f.desc);
         nameContainer.appendChild(name);
         nameContainer.appendChild(desc);
 
@@ -400,25 +458,43 @@ function initFriendsPage(){
     const Object_friendsPageBorder = new CSS3DObject(friendsPageBorder);
     
     Object_friendsPage.scale.set(2, 2, 2);
-    Object_friendsPage.position.set(-1450, 0, 0);
-    Object_friendsPage.rotation.set(0, Math.PI/2, 0);
+    Object_friendsPage.position.set(0, 0, -basePageDistance);
     
     Object_friendsPageBorder.scale.set(2, 2, 2);
-    Object_friendsPageBorder.position.set(-1600, 0, 0);
-    Object_friendsPageBorder.rotation.set(0, Math.PI/2, 0);
+    Object_friendsPageBorder.position.set(0, 0, -(basePageDistance+150));
     
-    scene.add(Object_friendsPage);
-    scene.add(Object_friendsPageBorder);
+    const group = new THREE.Group();
+    group.add(Object_friendsPage);
+    group.add(Object_friendsPageBorder);
+
+    pageGroups.push(group);
 }
 
 // mouse listener
 window.addEventListener('mousemove', (e)=>{
-    cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.5, -0.08, 0.08);
-    terrainPositionOffsetY = clamp((e.clientY - centerY)/h*10, -12, 12);
+    if(!isMobile){
+        cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.5, -0.08, 0.08);
+        terrainPositionOffsetY = clamp((e.clientY - centerY)/h*10, -12, 12);
+    }
 });
 
+// PC Scroll
 window.addEventListener('wheel', function(event) {
-    cameraRotateTargetY -= event.deltaY*0.005;
+    cameraRotateTargetY -= event.deltaY*0.003;
+}, { passive: true });
+
+// Mobile Scroll
+window.addEventListener("touchstart", (e) => {
+    lastTouchX = e.touches[0].clientX;
+}, { passive: true });
+
+window.addEventListener("touchmove", (e) => {
+    const touchX = e.touches[0].clientX;
+    const deltaX = touchX - lastTouchX;
+
+    cameraRotateTargetY += deltaX*0.004;
+
+    lastTouchX = touchX;
 }, { passive: true });
 
 // on window resize
@@ -461,4 +537,59 @@ function animate(){
 
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
+}
+
+function drawTree(chart){
+    let width = 680;
+    let height = 500;
+    
+    const svg = d3.select(chart)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append('g')
+        .attr('transform', `translate(${0},${30})`);
+
+    const hierarchyData = d3.hierarchy(skill_tree, function(d){ return d.children;});
+    const tree = d3.tree().size([width, height-100]);
+
+    // node
+
+    // node group
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(tree(hierarchyData).descendants())
+        .join("g")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+
+    // 圖片 node
+    node.append("image")
+        .attr("href", d => d.data.logo)
+        .attr("x", -20)
+        .attr("y", -20)
+        .attr("width", 40)
+        .attr("height", 40);
+
+    // 名稱
+    node.append("text")
+        .text(d => d.data.name)
+        .attr("y", 35)
+        .attr("text-anchor", "middle")
+        .attr("fill", "white");
+
+
+    // line
+    const g = svg.append("g");
+
+    g.selectAll("path")
+        .data(tree(hierarchyData).descendants().slice(1))
+        .join("path")
+        .attr("d", function(d) {
+            return "M" + d.x + "," + d.y
+                // + "L" + d.x + "," + (d.y - d.parent.y/2)
+                + "C" + d.x + "," + (d.y + d.parent.y) / 2.5
+                + " " + d.parent.x + "," +  (d.y + d.parent.y) / 2.5
+                + " " + d.parent.x + "," + d.parent.y;
+            })
+        .attr("stroke","white").attr("fill","none");
 }

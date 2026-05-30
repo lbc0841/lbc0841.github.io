@@ -51,7 +51,7 @@
 body {
     position: fixed;
     font-family: Arial, sans-serif;
-    background: linear-gradient(#201305 , #000000);
+    background: linear-gradient(#181818 , #000000);
 
     color: var(--content-color);
     height: 100dvh;

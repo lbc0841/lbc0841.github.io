@@ -141,14 +141,23 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
+.avatar {
+    width: 140px;
+    max-width: 80%;
+
+    margin: 10px;
+}
+
 .motto {
     position: relative;
     font-size: 1.2rem;
-    margin-left: 10px;
+    margin-left: 12px;
     padding-left: 18px;
-    color: #c97115;
+    color: #ff8400;
+    opacity: 70%;
 
     white-space: pre;
+    transition: all 100ms;
 }
 
 .motto::before {
@@ -156,21 +165,39 @@
     position: absolute;
     left: 0;
     height: 100%;
-    width: 4px;
-    background: #c97115;
+    width: 2px;
+    background: #ff8400;
+    opacity: 70%;
 
     transition: all 100ms;
 }
 
+.motto:hover {
+    opacity: 100%;
+}
+
 .motto:hover::before {
+    opacity: 100%;
     width: 8px;
+}
+
+.author-desc {
+    margin-left: 12px;
+    margin-top: 8px;
+
+    white-space: pre;
 }
 
 .chart {
     position: absolute;
-    top: 40px;
-    left: 30%;
-    width: 70%;
+    top: 12%;
+    left: 28%;
+    width: 72%;
+    height: 88%;
+}
+
+.tree-canvas {
+    width: 100%;
     height: 100%;
 }
 
@@ -237,8 +264,9 @@
 }
 
 .skill-img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
+    margin: 10px;
 }
 
 .skill-name {
@@ -274,7 +302,73 @@
     transform: translateX(20px);
 }
 
-/* ====== projects-page ====== */
+/* ====== live-page ====== */
+.live-container {
+    position: absolute;
+    top: 24%;
+    left: 16%;
+
+    display: flex;
+    width: 80%;
+    height: 76%;
+    overflow: hidden;
+    transform: skewX(-15deg);
+}
+
+.live-item {
+    flex: 1;
+    transition: all 0.5s ease;
+    position: relative;
+
+    border-right: 2px solid #fff;
+
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-right: 40px;
+
+    opacity: 0.8;
+
+    overflow: hidden;
+}
+
+.live-item:hover {
+    flex: 4;
+    filter: brightness(1.2);
+    opacity: 1;
+    border-right: 2px solid #ff8400;
+}
+
+.live-item .live-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: blur(4px);
+    transition: all 200ms;
+
+    transform: scale(1.1);
+}
+.live-item:hover .live-img {
+    filter: blur(0px);
+    transform: scale(1);
+}
+
+.live-item .live-content {
+    transform: skewX(15deg) rotateZ(195deg);
+    color: white;
+    font-size: 1.8rem;
+    opacity: 1;
+    transition: all 0.3s;
+    writing-mode: vertical-rl;
+}
+
+.live-item:hover .live-content {
+    opacity: 0;
+}
+
+/* ====== friends-page ====== */
 .friends-container {
     position: absolute;
     top: 26%;
@@ -316,7 +410,7 @@
     font-size: 1rem;
 }
 
-.desc {
+.friend-desc {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.6);
 }

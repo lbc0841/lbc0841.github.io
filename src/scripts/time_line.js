@@ -5,6 +5,8 @@ const spacing = 10;
 let lineCount = 0;
 let currentOffset = 0, targetOffset = 0;
 
+let lastTouchX = 0;
+
 resize();
 draw();
 
@@ -14,9 +16,24 @@ function lerp(start, end, time){
 
 window.addEventListener("resize", resize);
 
+// PC Scroll
 window.addEventListener("wheel", (e) => {
     targetOffset += e.deltaY*1.5;
 });
+
+// Mobile Scroll
+window.addEventListener("touchstart", (e) => {
+    lastTouchX = e.touches[0].clientX;
+}, { passive: true });
+
+window.addEventListener("touchmove", (e) => {
+    const touchX = e.touches[0].clientX;
+    const deltaX = touchX - lastTouchX;
+
+    targetOffset -= deltaX * 2; // 靈敏度可調
+
+    lastTouchX = touchX;
+}, { passive: true });
 
 function resize() {
     canvas.width = window.innerWidth;
