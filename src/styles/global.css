@@ -219,3 +219,21 @@ body {
 .link-text:hover {
     color: #74d4ff;
 }
+
+/* ------ switch ------ */
+
+#label-for-switch-2d-3d::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background: rgba(135, 135, 135, 0.16);
+	border-radius: 4px;
+	transition: 0.3s;
+}
+
+input:checked + label:after {
+	transform: translateX(100%);
+}

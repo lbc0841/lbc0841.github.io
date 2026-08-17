@@ -1,14 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-import Scanlines from '../components/Scanlines.astro';
 import Loader from '../components/Loader.astro';
-import Timeline from '../components/Timeline.astro';
 
+import Page2D from '../components/page2d.astro';
+import Page3D from '../components/page3d.astro';
 
 import '../styles/css3d.css'
 ---
-
 
 <Layout>
 	<!-- MainNavigation -->
@@ -21,17 +20,38 @@ import '../styles/css3d.css'
             <button id="about-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">ABOUT</button>
             <button id="notes-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">LIVE</button>
             <button id="friends-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">FRIENDS</button>
+
+            <input id="switch-2d-3d" type="checkbox" class="h-0 w-0 hidden"/>
+            <label id="label-for-switch-2d-3d" for="switch-2d-3d" class="relative flex gap-4 bg-zinc-600/35 rounded-sm my-4 px-2 py-1">
+                <span class="">2D</span>
+                <span class="">3D</span>
+            </label>
         </div>
 	</div>
 
 	<!-- <Scanlines/> -->
 	<Loader/>
-	<Timeline/>
 
-	<h3 class="absolute bottom-2 left-2 text-sm text-zinc-500">Powered by Astro / Three.js</h3>
-	<h3 class="absolute bottom-2 right-2 text-sm text-zinc-500">Scroll Your Wheel</h3>
-
+    <div id="page2d" class="w-full h-full" style="display: block;"><Page2D/></div>
+    <div id="page3d" class="w-full h-full" style="display: none;"><Page3D/></div>
+    
 </Layout>
 
 <script src="../scripts/main.js"/>
 
+
+<script>
+    const switch2D3D = document.getElementById('switch-2d-3d');
+    const page2d = document.getElementById('page2d');
+    const page3d = document.getElementById('page3d');
+
+    switch2D3D?.addEventListener('change', () => {
+        if (switch2D3D.checked) {
+            page2d?.setAttribute('style', 'display: none;');
+            page3d?.setAttribute('style', 'display: block;');
+        } else {
+            page2d?.setAttribute('style', 'display: block;');
+            page3d?.setAttribute('style', 'display: none;');
+        }
+    });
+</script>

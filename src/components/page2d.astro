@@ -1,0 +1,110 @@
+---
+import live from '../data/live.json' with { type: 'json' };
+import friends from '../data/friends.json' with { type: 'json' };
+
+import '../styles/css3d.css'
+---
+
+<div class="w-full h-full px-6 overflow-scroll">
+    <div class="relative mt-14 h-[80%] w-full">
+        <div class="page-title">
+            01
+            <h3 class="text-lg">Home Page</h3>
+        </div>
+
+        <div id="logo" class="scale-75 -translate-y-10"></div>
+
+        <div class="last-update-container">
+            Last Update
+            <h3 class="last-update-date">May 2026</h3>
+        </div>
+
+        <div class="social-link-container">
+            <a class="social-link" href="https://discord.gg/GWEmUwaSFG" target="_blank">
+                <span class="fa-brands fa-discord"></span>
+                <span class="">Discord</span>
+            </a>
+
+            <a class="social-link" href="https://github.com/lbc0841" target="_blank">
+                <span class="fa-brands fa-github"></span>
+                <span class="">GitHub</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="relative mt-24 h-[80%] w-full">
+
+        <div class="page-title">
+            02
+            <h3 class="text-lg">Me & My Notes</h3>
+        </div>
+
+        <div class="side-bar">
+            <img class="avatar" src="https://avatars.githubusercontent.com/lbc0841" alt="avatar"/> 
+            <div class="motto">梭哈，是種智慧<br>賭狗，應有盡有</div>
+            <h3 class="author-desc">- MBIT：INTP<br>- 愚人節生日<br>- 我裂開了</h3>
+        </div>
+    </div>
+
+    <div class="relative mt-24 h-[80%] w-full">
+
+        <div class="page-title">
+            03
+            <h3 class="text-lg">My Live</h3>
+        </div>
+
+        <div class="live-container">
+            {
+                live.map((l) => (
+                    <div class="live-item">
+                        <div class="live-img" style={`background: url("${l.image}"); background-size: cover; background-position: center;`}></div>
+                        <div class="live-content">{l.name}</div>
+                    </div>
+                ))
+            }
+        </div>
+
+    </div>
+
+    <div class="relative mt-24 h-[80%] w-full">
+
+        <div class="page-title">
+            04
+            <h3 class="text-lg">My Friends</h3>
+        </div>
+
+        <div class="friends-container">
+            {
+                friends.map((f) => (
+                    <a class="friend" href={f.url} target="_blank">
+                        <img class="h-full" src={f.avatar} alt={f.name} />
+                        <div class="w-full">
+                            <h3 class="name">{f.name}</h3>
+                            <span class="friend-desc">{f.desc}</span>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+
+    </div>
+
+    <div class="relative mt-12 w-full">
+        <h3 class="absolute bottom-2 left-2 text-sm text-zinc-500">Powered by Astro</h3>
+        <h3 class="absolute bottom-2 right-2 text-sm text-zinc-500">© 2026 All rights reserved.</h3>
+    </div>
+
+</div>
+
+
+<script>
+    window.addEventListener('load', function () {
+		lottie.loadAnimation({
+			container: logo,
+			renderer: 'svg',
+			loop: false,
+			autoplay: true,
+			path: '/lottie/logo.json'
+		});
+	});
+</script>

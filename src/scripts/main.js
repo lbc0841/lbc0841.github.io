@@ -7,7 +7,6 @@ import { treemap, hierarchy, tree } from "https://cdn.skypack.dev/d3-hierarchy@3
 import * as d3 from "https://cdn.skypack.dev/d3@7";
 
 import friends from '../data/friends.json' with { type: 'json' };
-import skill_tree from '../data/skill_tree.json' with { type: 'json' };
 import live from '../data/live.json' with { type: 'json' };
 
 // ====== Val ======
@@ -22,7 +21,7 @@ let cameraRotateTargetY = 0;
 let terrain = null, sphere = null;
 
 // particle
-const particleCount = 5000;
+const particleCount = 500;
 let particleGeometry = new THREE.BufferGeometry();
 const particlePosition = new Float32Array(particleCount * 3);
 const particleVelocity = [];
@@ -121,14 +120,17 @@ function init(){
     webglRenderer.setSize(window.innerWidth, window.innerHeight);
     webglRenderer.setPixelRatio(window.devicePixelRatio);
     // webglRenderer.setClearColor(0x000000, 0);
-    document.body.appendChild(webglRenderer.domElement);
+    document.getElementById("page3d").appendChild(webglRenderer.domElement);
+    // document.body.appendChild(webglRenderer.domElement);
 
     // CSS Render
     cssRenderer = new CSS3DRenderer({ alpha: false });
     cssRenderer.setSize(window.innerWidth, window.innerHeight);
     cssRenderer.domElement.style.position = 'absolute';
     cssRenderer.domElement.style.top = '0';
-    document.body.appendChild(cssRenderer.domElement);
+
+    document.getElementById("page3d").appendChild(cssRenderer.domElement);
+    // document.body.appendChild(cssRenderer.domElement);
 
     // Scene
     scene = new THREE.Scene();
@@ -333,7 +335,7 @@ function initAboutPage(){
 
     // Page Number
     const aboutPageNumber = createElement("div", ["page-title"], "0"+pageNum);
-    const aboutPageTitle = createElement("h3", ["text-lg"], "About Me");
+    const aboutPageTitle = createElement("h3", ["text-lg"], "Me & My Notes");
 
     aboutPageNumber.appendChild(aboutPageTitle)
     aboutPage.appendChild(aboutPageNumber);
@@ -352,11 +354,10 @@ function initAboutPage(){
 
     aboutPage.appendChild(sideBar);
 
-    // chart
-    const chart = createElement("div", ["chart"], "");
-
-    drawTree(chart);
-    aboutPage.appendChild(chart);
+    // Note
+    // const notes = createElement("div", ["notes-container"], "");
+    // const note1 = createElement("div", ["note"], "01. 數位電子乙級");
+    // const note2 = createElement("div", ["note"], "02. ZJANS-ZeroJudge題解");
 
     // CSS3DObject
     const Object_aboutPage = new CSS3DObject(aboutPage);
@@ -371,48 +372,6 @@ function initAboutPage(){
     const group = new THREE.Group();
     group.add(Object_aboutPage);
     group.add(Object_aboutPageBorder);
-
-    pageGroups.push(group);
-}
-
-function initNotesPage(){
-    pageNum++;
-
-    // Notes Page
-    const notesPage = createElement("div", ["page"], "");
-
-    // Notes Page Border
-    const notesPageBorder = createElement("div", ["page-border"], "");
-
-    // Page Number
-    const notesPageNumber = createElement("div", ["page-title"], "0"+pageNum);
-    const notesPageTitle = createElement("h3", ["text-lg"], "My Notes");
-    
-    notesPageNumber.appendChild(notesPageTitle)
-    notesPage.appendChild(notesPageNumber);
-
-    // 01
-    const notes = createElement("div", ["notes-container"], "");
-    const note1 = createElement("div", ["note"], "01. 數位電子乙級");
-    const note2 = createElement("div", ["note"], "02. ZJANS-ZeroJudge題解");
-    
-    notes.appendChild(note1);
-    notes.appendChild(note2);
-    notesPage.appendChild(notes);
-
-    // CSS3DObject
-    const Object_livePage = new CSS3DObject(notesPage);
-    const Object_livePageBorder = new CSS3DObject(notesPageBorder);
-    
-    Object_livePage.scale.set(2, 2, 2);
-    Object_livePage.position.set(0, 0, -basePageDistance);
-    
-    Object_livePageBorder.scale.set(2, 2, 2);
-    Object_livePageBorder.position.set(0, 0, -(basePageDistance+150));
-    
-    const group = new THREE.Group();
-    group.add(Object_livePage);
-    group.add(Object_livePageBorder);
 
     pageGroups.push(group);
 }
@@ -528,8 +487,8 @@ function initFriendsPage(){
 // mouse listener
 window.addEventListener('mousemove', (e)=>{
     if(!isMobile){
-        cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.4, -0.06, 0.06);
-        cameraRotateOffsetX = clamp((e.clientY - centerY)/w*0.4, -0.06, 0.06);
+        cameraRotateOffsetY = clamp((e.clientX - centerX)/w*0.2, -0.06, 0.06);
+        cameraRotateOffsetX = clamp((e.clientY - centerY)/w*0.2, -0.06, 0.06);
     }
 });
 
@@ -592,61 +551,6 @@ function animate(){
 
     webglRenderer.render(scene, camera);
     cssRenderer.render(scene, camera);
-}
-
-function drawTree(chart){
-    let width = 680;
-    let height = 500;
-    
-    const svg = d3.select(chart)
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append('g')
-        .attr('transform', `translate(${0},${30})`);
-
-    const hierarchyData = d3.hierarchy(skill_tree, function(d){ return d.children;});
-    const tree = d3.tree().size([width, height-100]);
-
-    // node
-
-    // node group
-    const node = svg.append("g")
-        .selectAll("g")
-        .data(tree(hierarchyData).descendants())
-        .join("g")
-        .attr("transform", d => `translate(${d.x},${d.y})`);
-
-    // 圖片 node
-    node.append("image")
-        .attr("href", d => d.data.logo)
-        .attr("x", -20)
-        .attr("y", -20)
-        .attr("width", 40)
-        .attr("height", 40);
-
-    // 名稱
-    node.append("text")
-        .text(d => d.data.name)
-        .attr("y", 35)
-        .attr("text-anchor", "middle")
-        .attr("fill", "white");
-
-
-    // line
-    const g = svg.append("g");
-
-    g.selectAll("path")
-        .data(tree(hierarchyData).descendants().slice(1))
-        .join("path")
-        .attr("d", function(d) {
-            return "M" + d.x + "," + d.y
-                // + "L" + d.x + "," + (d.y - d.parent.y/2)
-                + "C" + d.x + "," + (d.y + d.parent.y) / 2.5
-                + " " + d.parent.x + "," +  (d.y + d.parent.y) / 2.5
-                + " " + d.parent.x + "," + d.parent.y;
-            })
-        .attr("stroke","white").attr("fill","none");
 }
 
 function updateCamera(){
