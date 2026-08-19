@@ -12,11 +12,11 @@ import '../styles/css3d.css'
 <Layout>
 	<!-- MainNavigation -->
 	<div class="absolute top-0 left-0 w-full px-4 md:px-10 flex justify-between align-middle z-999">
-        <div class="font-bold py-4" onclick="location.href='/icrack41-blog';">ICRACK</div>
+        <button class="font-bold my-4" onclick="location.href='/';">ICRACK</button>
 
         <!-- MenuBar -->
         <div class="flex gap-6">
-            <button id="home-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">HOME</button>
+            <button id="home-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200 hidden sm:block">HOME</button>
             <button id="about-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">ABOUT</button>
             <button id="notes-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">LIVE</button>
             <button id="friends-button" class="my-4 text-white/60 hover:text-white filter hover:drop-shadow-[0_0_6px_white] duration-200">FRIENDS</button>
@@ -32,8 +32,13 @@ import '../styles/css3d.css'
 	<!-- <Scanlines/> -->
 	<Loader/>
 
-    <div id="page2d" class="w-full h-full" style="display: block;"><Page2D/></div>
-    <div id="page3d" class="w-full h-full" style="display: none;"><Page3D/></div>
+    <div id="page2d" class="w-full h-full px-6 overflow-scroll" style="display: block; scroll-behavior: smooth;">
+        <Page2D/>
+    </div>
+
+    <div id="page3d" class="w-full h-full" style="display: none;">
+        <Page3D/>
+    </div>
     
 </Layout>
 
@@ -54,4 +59,25 @@ import '../styles/css3d.css'
             page3d?.setAttribute('style', 'display: none;');
         }
     });
+
+const homeButton = document.getElementById("home-button");
+const aboutButton = document.getElementById("about-button");
+const notesButton = document.getElementById("notes-button");
+const friendsButton = document.getElementById("friends-button");
+
+homeButton?.addEventListener("click", () => {
+    page2d?.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+aboutButton?.addEventListener("click", () => {
+    page2d?.scrollTo({ top: window.innerHeight*0.8 + 96 + 14, behavior: "smooth" });
+});
+
+notesButton?.addEventListener("click", () => {
+    page2d?.scrollTo({ top: window.innerHeight*0.8*2 + 96*2 + 14*2, behavior: "smooth" });
+});
+
+friendsButton?.addEventListener("click", () => {
+    page2d?.scrollTo({ top: window.innerHeight*0.8*3 + 96*3 + 14*3, behavior: "smooth" });
+});
 </script>

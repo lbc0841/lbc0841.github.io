@@ -20,6 +20,8 @@ let cameraRotateTargetY = 0;
 
 let terrain = null, sphere = null;
 
+const page3dContainer = document.getElementById("page3d");
+
 // particle
 const particleCount = 500;
 let particleGeometry = new THREE.BufferGeometry();
@@ -120,7 +122,7 @@ function init(){
     webglRenderer.setSize(window.innerWidth, window.innerHeight);
     webglRenderer.setPixelRatio(window.devicePixelRatio);
     // webglRenderer.setClearColor(0x000000, 0);
-    document.getElementById("page3d").appendChild(webglRenderer.domElement);
+    page3dContainer.appendChild(webglRenderer.domElement);
     // document.body.appendChild(webglRenderer.domElement);
 
     // CSS Render
@@ -129,7 +131,7 @@ function init(){
     cssRenderer.domElement.style.position = 'absolute';
     cssRenderer.domElement.style.top = '0';
 
-    document.getElementById("page3d").appendChild(cssRenderer.domElement);
+    page3dContainer.appendChild(cssRenderer.domElement);
     // document.body.appendChild(cssRenderer.domElement);
 
     // Scene
@@ -201,23 +203,23 @@ function initObjects(){
     });
 
     // Sphere
-    objLoader.load('/threejs/model/sphere.obj', (root) => {
-        root.scale.set(10, 10, 10);
-        root.position.set(0, 0, -(basePageDistance/25));
+    // objLoader.load('/threejs/model/sphere.obj', (root) => {
+    //     root.scale.set(10, 10, 10);
+    //     root.position.set(0, 0, -(basePageDistance/25));
 
-        root.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshBasicMaterial({
-                    color: 0xc97115,
-                    wireframe: true,
-                    wireframeLinewidth: 1
-                });
-            }
-        });
+    //     root.traverse((child) => {
+    //         if (child.isMesh) {
+    //             child.material = new THREE.MeshBasicMaterial({
+    //                 color: 0xc97115,
+    //                 wireframe: true,
+    //                 wireframeLinewidth: 1
+    //             });
+    //         }
+    //     });
 
-        sphere = root;
-        scene.add(sphere);
-    });
+    //     sphere = root;
+    //     scene.add(sphere);
+    // });
 }
 
 function initParticle(){
@@ -355,9 +357,22 @@ function initAboutPage(){
     aboutPage.appendChild(sideBar);
 
     // Note
-    // const notes = createElement("div", ["notes-container"], "");
-    // const note1 = createElement("div", ["note"], "01. 數位電子乙級");
-    // const note2 = createElement("div", ["note"], "02. ZJANS-ZeroJudge題解");
+    const notesContainer = createElement("div", ["notes-container"], "");
+    const hackmd = createElement("h3", ["text-lg"], "HackMD");
+    const note1 = createElement("a", ["note"], "01. 115北科大資工系甄選實做考題");
+    note1.href = "https://hackmd.io/@lbc0841/ryrFGEDUze"; note1.target = "_blank";
+
+    const other = createElement("h3", ["text-lg", "mt-12"], "Other Notes");
+    const note2 = createElement("a", ["note"], "01. ZJANS-ZeroJudge題解");
+    note2.href = "https://lbc0841.github.io/zjans"; note2.target = "_blank";
+
+    notesContainer.appendChild(hackmd);
+    notesContainer.appendChild(note1);
+
+    notesContainer.appendChild(other);
+    notesContainer.appendChild(note2);
+
+    aboutPage.appendChild(notesContainer);
 
     // CSS3DObject
     const Object_aboutPage = new CSS3DObject(aboutPage);
@@ -494,6 +509,7 @@ window.addEventListener('mousemove', (e)=>{
 
 // PC Scroll
 window.addEventListener('wheel', function(event) {
+    if(page3dContainer.style.display === "none") return;
     cameraRotateTargetY -= event.deltaY*0.003;
 }, { passive: true });
 
