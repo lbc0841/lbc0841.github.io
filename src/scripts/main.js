@@ -157,9 +157,7 @@ function initObjects(){
         root.traverse((child) => {
             if (child.isMesh) {
                 const material = new THREE.ShaderMaterial({
-                    uniforms: {
-                        // 目前不需要 cameraPosition uniform（因為用 view space 計算距離）
-                    },
+                    uniforms: {},
                     vertexShader: `
                         varying vec3 vWorldPosition;
                 

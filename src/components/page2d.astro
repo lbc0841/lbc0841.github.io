@@ -1,6 +1,9 @@
 ---
 import live from "../data/live.json" with { type: "json" };
 import friends from "../data/friends.json" with { type: "json" };
+import notes from "../data/notes.json" with { type: "json" };
+import projects from "../data/projects.json" with { type: "json" };
+import works from "../data/works.json" with { type: "json" };
 
 import "../styles/css3d.css";
 ---
@@ -41,14 +44,16 @@ import "../styles/css3d.css";
         <h3 class="text-lg">Home Page</h3>
     </div>
 
-    <div id="logo2d" class="logo scale-90 -translate-y-[6%]"></div>
-
-    <div class="last-update-container">
-        Last Update
-        <h3 class="last-update-date">May 2026</h3>
+    <div class="h-full w-full float-in">
+        <div id="logo2d" class="absolute top-[48%] w-full scale-90 -translate-y-[50%]"></div>
     </div>
 
-    <div class="social-link-container">
+    <div class="last-update-container float-in">
+        Last Update
+        <h3 class="last-update-date float-in">May 2026</h3>
+    </div>
+
+    <div class="social-link-container float-in">
         <a class="social-link" href="https://discord.gg/GWEmUwaSFG" target="_blank">
             <span class="fa-brands fa-discord"></span>
             <span class="">Discord</span>
@@ -58,27 +63,90 @@ import "../styles/css3d.css";
             <span class="fa-brands fa-github"></span>
             <span class="">GitHub</span>
         </a>
-    </div>
+     </div>
 </div>
 
-<div class="relative mt-24 h-[80%] w-full">
+<div class="relative mt-24 h-[90%] w-full">
     <div class="page-title">
         02
-        <h3 class="text-lg">Me & My Notes</h3>
+        <h3 class="text-lg">About Me</h3>
     </div>
 
-    <div class="side-bar">
-        <img class="avatar" src="https://avatars.githubusercontent.com/lbc0841" alt="avatar"/>
-        <div class="motto">梭哈，是種智慧<br />賭狗，應有盡有</div>
+    <div class="absolute w-[26%] top-[26%] left-0 float-in">
+        <!-- <img class="avatar mt-auto" src="https://avatars.githubusercontent.com/lbc0841" alt="avatar"/> -->
+        <div class="motto my-6">梭哈，是種智慧<br />賭狗，應有盡有</div>
         <h3 class="author-desc">- MBIT：INTP<br />- 愚人節生日<br />- 我裂開了</h3>
+
+        <div class="w-36 h-36 rounded-[50%] border-2 border-zinc-500 mt-12 ml-4">
+            <h3 class="text-4xl my-2 text-center">
+                <span class="text-zinc-500 text-sm">APCS</span><br>
+                4/3
+            </h3>
+        </div>
     </div>
 
-    <div class="notes-container">
-        <h3 class="text-lg">HackMD</h3>
-        <a class="note" href="https://hackmd.io/@lbc0841/ryrFGEDUze" target="_blank">01. 115北科大資工系甄選實做考題</a>
+    
 
-        <h3 class="text-lg mt-12">Other Notes</h3>
-        <a class="note" href="https://lbc0841.github.io/zjans" target="_blank">01. ZJANS-ZeroJudge題解</a>
+    <div class="absolute w-[74%] top-20 right-0">
+
+        <div class="group relative border-l border-zinc-600 pl-6 hover:border-l-4 hover:border-white duration-150 float-in">
+            <h2 class="text-2xl">&gt; WORKS</h2>
+            {
+                works.map((w) => (
+                    <a class="relative block ml-2 my-2 p-2 opacity-50 hover:opacity-100 duration-100" href={w.url} target="_blank">
+                        <h3 class="text-lg/tight">{w.title}<br/>
+                            <span class="text-xs text-zinc-500">{w.desc}</span>
+                        </h3>
+
+                        <span class="block text-xs text-zinc-500 absolute top-[50%] right-0">{w.date}</span>
+                    </a>
+                ))
+            }
+            
+            <a class="absolute opacity-0 group-hover:opacity-100 top-2 right-0 text-sm text-zinc-500 hover:text-white duration-150"
+                href="https://lbc0841.github.io/works">
+                View More
+            </a>          
+        </div>
+
+        <div class="group relative mt-14 border-l border-zinc-600 pl-6 hover:border-l-4 hover:border-white duration-150 float-in">
+            <h2 class="text-2xl">&gt; NOTES</h2>
+            {
+                notes.map((n) => (
+                    <a class="relative block ml-2 my-2 p-2 opacity-50 hover:opacity-100 duration-100" href={n.url} target="_blank">
+                        <h3 class="text-lg/tight">{n.title}<br/>
+                            <span class="text-xs text-zinc-500">{n.desc}</span>
+                        </h3>
+
+                        <span class="block text-xs text-zinc-500 absolute top-[50%] right-0">{n.date}</span>
+                    </a>
+                ))
+            }
+            <a class="absolute opacity-0 group-hover:opacity-100 top-2 right-0 text-sm text-zinc-500 hover:text-white duration-150"
+                href="https://lbc0841.github.io/notes">
+                View More
+            </a> 
+        </div>
+        
+
+        <div class="group relative mt-14 border-l border-zinc-600 pl-6 hover:border-l-4 hover:border-white duration-150 float-in">
+            <h3 class="text-2xl">&gt; PROJECTS</h3>
+            {
+                projects.map((p) => (
+                    <a class="relative block ml-2 my-2 p-2 opacity-50 hover:opacity-100 duration-100" href={p.url} target="_blank">
+                        <h3 class="text-lg/tight">{p.title}<br/>
+                            <span class="text-xs text-zinc-500">{p.desc}</span>
+                        </h3>
+
+                        <span class="block text-xs text-zinc-500 absolute top-[50%] right-0">{p.date}</span>
+                    </a>
+                ))
+            }
+            <a class="absolute opacity-0 group-hover:opacity-100 top-2 right-0 text-sm text-zinc-500 hover:text-white duration-150"
+                href="https://lbc0841.github.io/projects">
+                View More
+            </a> 
+        </div>
     </div>
 </div>
 
@@ -91,7 +159,7 @@ import "../styles/css3d.css";
     <div class="live-container">
         {
             live.map((l) => (
-                <div class="live-item">
+                <div class="live-item float-in">
                     <div
                         class="live-img"
                         style={`background: url("${l.image}"); background-size: cover; background-position: center;`}
@@ -112,7 +180,7 @@ import "../styles/css3d.css";
     <div class="friends-container">
         {
             friends.map((f) => (
-                <a class="friend" href={f.url} target="_blank">
+                <a class="friend float-in" href={f.url} target="_blank">
                     <img class="h-full" src={f.avatar} alt={f.name} />
                     <div class="w-full hidden sm:block">
                         <h3 class="name">{f.name}</h3>
@@ -124,7 +192,7 @@ import "../styles/css3d.css";
     </div>
 </div>
 
-<div class="relative mt-12 w-full">
+<div class="relative mt-16 w-full">
     <h3 class="absolute bottom-2 left-2 text-sm text-zinc-500">
         Powered by Astro
     </h3>

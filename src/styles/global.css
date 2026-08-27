@@ -13,6 +13,8 @@
     /* cursor: none; */
 
     font-family: 'Share Tech Mono', monospace;
+
+    /* filter: drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.2)); */
 }
 
 :root {
@@ -59,6 +61,7 @@ body {
     width: 100dvw;
     
     overflow: hidden;
+    /* animation: fade-in 0.1s ease-in-out infinite; */
 }
 
 .font-share-tech-mono {
@@ -249,3 +252,14 @@ input:checked + label:after {
 	transform: translateX(100%);
 }
 
+/* anim */
+.float-in {
+    opacity: 0;
+    transform: translateY(60px) skewX(15deg) scaleY(0.5);
+    transition: all 0.6s ease;
+}
+
+.float-in.show {
+    opacity: 1;
+    transform: translateY(0) skewX(0deg) scaleY(1);
+}

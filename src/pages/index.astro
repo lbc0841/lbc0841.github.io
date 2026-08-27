@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
+import Scanlines from '../components/Scanlines.astro';
 import Loader from '../components/Loader.astro';
 
 import Page2D from '../components/page2d.astro';
@@ -23,8 +23,8 @@ import '../styles/css3d.css'
 
             <input id="switch-2d-3d" type="checkbox" class="h-0 w-0 hidden"/>
             <label id="label-for-switch-2d-3d" for="switch-2d-3d" class="relative flex gap-4 bg-zinc-600/35 rounded-sm my-4 px-2 py-1">
-                <span class="">2D</span>
-                <span class="">3D</span>
+                <span class="select-none">2D</span>
+                <span class="select-none">3D</span>
             </label>
         </div>
 	</div>
@@ -32,7 +32,7 @@ import '../styles/css3d.css'
 	<!-- <Scanlines/> -->
 	<Loader/>
 
-    <div id="page2d" class="w-full h-full px-6 overflow-y-scroll overflow-x-hidden" style="display: block;">
+    <div id="page2d" class="w-full h-full px-12 overflow-y-scroll overflow-x-hidden" style="display: block;">
         <Page2D/>
     </div>
 
@@ -43,7 +43,7 @@ import '../styles/css3d.css'
 </Layout>
 
 <script src="../scripts/main.js"/>
-
+<!-- <script src="../scripts/background.js"/> -->
 
 <script>
     const switch2D3D = document.getElementById('switch-2d-3d');
@@ -54,9 +54,13 @@ import '../styles/css3d.css'
         if (switch2D3D.checked) {
             page2d?.setAttribute('style', 'display: none;');
             page3d?.setAttribute('style', 'display: block;');
+            // document.body.style.filter = 'invert(1)';
+            // document.body.style.filter = 'invert(0)';
         } else {
             page2d?.setAttribute('style', 'display: block;');
             page3d?.setAttribute('style', 'display: none;');
+            // document.body.style.filter = 'invert(1)';
+            // document.body.style.filter = 'invert(0)';
         }
     });
 
